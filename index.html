@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MyShop - Cửa hàng online</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container header-inner">
+
+            <a href="#" class="logo">
+                MyShop
+            </a>
+
+            <nav class="menu">
+                <a href="#">Trang chủ</a>
+                <a href="#products">Sản phẩm</a>
+                <a href="#about">Giới thiệu</a>
+                <a href="#contact">Liên hệ</a>
+            </nav>
+
+
+            <div class="header-actions">
+                <button class="search-btn">🔍</button>
+
+                <button class="cart-btn">
+                    🛒
+                    <span id="cart-count">0</span>
+                </button>
+
+                <button id="logout-btn" class="logout-btn">
+                    Đăng xuất
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- BANNER -->
+    <section class="banner">
+
+        <div class="container banner-content">
+
+            <div class="banner-text">
+
+                <span class="banner-label">
+                    SALE 2026
+                </span>
+
+                <h1>
+                    Thời trang mới<br>
+                    Cho phong cách của bạn
+                </h1>
+
+                <p>
+                    Khám phá những sản phẩm mới nhất
+                    với mức giá cực kỳ hấp dẫn.
+                </p>
+
+                <a href="#products" class="banner-btn">
+                    Mua ngay
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PRODUCTS -->
+    <main>
+
+        <section id="products" class="products-section">
+
+            <div class="container">
+
+                <div class="section-header">
+
+                    <div>
+                        <span class="section-label">
+                            SHOP
+                        </span>
+
+                        <h2>
+                            Sản phẩm nổi bật
+                        </h2>
+                    </div>
+
+                    <select id="sort-products">
+                        <option value="default">
+                            Sắp xếp
+                        </option>
+
+                        <option value="price-asc">
+                            Giá thấp → cao
+                        </option>
+
+                        <option value="price-desc">
+                            Giá cao → thấp
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <!-- JS sẽ render sản phẩm vào đây -->
+                <div id="product-list" class="product-grid">
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ABOUT -->
+        <section id="about" class="about-section">
+
+            <div class="container">
+
+                <h2>
+                    Về MyShop
+                </h2>
+
+                <p>
+                    MyShop là một website bán hàng demo được
+                    xây dựng bằng HTML, CSS và JavaScript.
+                    Bạn có thể sử dụng project này để luyện tập
+                    cách lấy dữ liệu JSON và render giao diện
+                    bằng JavaScript.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer id="contact">
+
+        <div class="container footer-inner">
+
+            <div>
+                <h3>MyShop</h3>
+                <p>
+                    Cửa hàng online của bạn.
+                </p>
+            </div>
+
+            <div>
+                <h4>Liên hệ</h4>
+                <p>Email: hello@myshop.com</p>
+                <p>Hotline: 0909 123 456</p>
+            </div>
+
+        </div>
+
+        <div class="copyright">
+            © 2026 MyShop. All rights reserved.
+        </div>
+
+    </footer>
+
+    <script>
+        const isLoggedIn =
+            localStorage.getItem("isLoggedIn");
+
+        if (isLoggedIn !== "true") {
+            window.location.href = "login.html";
+        }
+    </script>
+    <script>
+        const productList = document.querySelector("#product-list");
+
+        const cartCount = document.querySelector("#cart-count");
+
+        const sortSelect = document.querySelector("#sort-products");
+
+
+        let products = [];
+
+        let cart = 0;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | LOAD PRODUCTS
+        |--------------------------------------------------------------------------
+        */
+
+        async function loadProducts() {
+
+            try {
+
+                const response = await fetch("./products.json");
+
+                products = await response.json();
+
+                renderProducts(products);
+
+            } catch (error) {
+
+                console.error(
+                    "Không thể load products:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RENDER PRODUCTS
+        |--------------------------------------------------------------------------
+        */
+
+        function renderProducts(productsData) {
+
+            productList.innerHTML = "";
+
+            productsData.forEach(product => {
+
+                const card = document.createElement("div");
+
+                card.classList.add("product-card");
+
+
+                card.innerHTML = `
+
+            <div class="product-image">
+
+                <img
+                    src="${product.image}"
+                    alt="${product.name}"
+                >
+
+                <span class="product-badge">
+                    ${product.badge}
+                </span>
+
+            </div>
+
+
+            <div class="product-info">
+
+                <div class="product-category">
+                    ${product.category}
+                </div>
+
+                <h3 class="product-name">
+                    ${product.name}
+                </h3>
+
+                <div class="product-price">
+
+                    ${formatPrice(product.price)}
+
+                    <span class="product-old-price">
+                        ${formatPrice(product.oldPrice)}
+                    </span>
+
+                </div>
+                  <a
+                        href="detail.html?id=${product.id}"
+                        class="view-detail"
+                    >
+                        Xem chi tiết
+                    </a>
+                <button
+                    class="add-cart"
+                    data-id="${product.id}"
+                >
+                    Thêm vào giỏ
+                </button>
+
+            </div>
+
+        `;
+
+
+                productList.appendChild(card);
+
+            });
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | FORMAT PRICE
+        |--------------------------------------------------------------------------
+        */
+
+        function formatPrice(price) {
+
+            return new Intl.NumberFormat(
+                "vi-VN"
+            ).format(price) + "đ";
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ADD TO CART
+        |--------------------------------------------------------------------------
+        */
+
+        productList.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target.classList.contains(
+                        "add-cart"
+                    )
+                ) {
+
+                    const productId =
+                        event.target.dataset.id;
+
+
+                    console.log(
+                        "Product ID:",
+                        productId
+                    );
+
+
+                    cart++;
+
+
+                    cartCount.textContent =
+                        cart;
+
+
+                    event.target.textContent =
+                        "Đã thêm ✓";
+
+
+                    setTimeout(() => {
+
+                        event.target.textContent =
+                            "Thêm vào giỏ";
+
+                    }, 1000);
+
+                }
+
+            }
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SORT PRODUCTS
+        |--------------------------------------------------------------------------
+        */
+
+        sortSelect.addEventListener(
+            "change",
+            function () {
+
+                const value =
+                    sortSelect.value;
+
+
+                let sortedProducts =
+                    [...products];
+
+
+                if (value === "price-asc") {
+
+                    sortedProducts.sort(
+                        (a, b) =>
+                            a.price - b.price
+                    );
+
+                }
+
+
+                if (value === "price-desc") {
+
+                    sortedProducts.sort(
+                        (a, b) =>
+                            b.price - a.price
+                    );
+
+                }
+
+
+                renderProducts(
+                    sortedProducts
+                );
+
+            }
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | START
+        |--------------------------------------------------------------------------
+        */
+
+        loadProducts();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | LOGOUT
+        |--------------------------------------------------------------------------
+        */
+
+        const logoutButton =
+            document.querySelector("#logout-btn");
+
+
+        logoutButton.addEventListener(
+            "click",
+            function () {
+
+                // Xóa trạng thái login
+                localStorage.removeItem(
+                    "isLoggedIn"
+                );
+
+                // Xóa email
+                localStorage.removeItem(
+                    "userEmail"
+                );
+
+
+                // Quay lại login
+                window.location.href =
+                    "login.html";
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

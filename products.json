@@ -1,0 +1,130 @@
+[
+    {
+        "id": 1,
+        "name": "Classic White T-Shirt",
+        "category": "T-Shirt",
+        "price": 299000,
+        "oldPrice": 399000,
+        "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=80",
+        "images": [
+            "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&w=800&q=80"
+        ],
+        "badge": "SALE",
+        "description": "Áo thun trắng basic với thiết kế đơn giản, chất liệu mềm mại và thoáng mát. Phù hợp để mặc hàng ngày và dễ dàng kết hợp với nhiều phong cách.",
+        "stock": 25
+    },
+    {
+        "id": 2,
+        "name": "Black Hoodie",
+        "category": "Hoodie",
+        "price": 599000,
+        "oldPrice": 799000,
+        "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=800&q=80",
+        "images": [
+            "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1509942774463-acf339cf87d5?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1578681994506-b8f463449011?auto=format&fit=crop&w=800&q=80"
+        ],
+        "badge": "SALE",
+        "description": "Hoodie màu đen phong cách basic, thiết kế tối giản và dễ phối đồ. Phù hợp sử dụng hàng ngày, đi học hoặc đi chơi.",
+        "stock": 18
+    },
+    {
+        "id": 3,
+        "name": "Denim Jacket",
+        "category": "Jacket",
+        "price": 799000,
+        "oldPrice": 999000,
+        "image": "https://images.unsplash.com/photo-1551537482-f2075a1d41f2?auto=format&fit=crop&w=800&q=80",
+        "images": [
+            "https://images.unsplash.com/photo-1551537482-f2075a1d41f2?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1543076447-215ad9ba6923?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1578932750294-f5075e85f44a?auto=format&fit=crop&w=800&q=80"
+        ],
+        "badge": "NEW",
+        "description": "Áo khoác denim mang phong cách casual hiện đại. Thiết kế dễ phối với áo thun, hoodie hoặc nhiều loại trang phục khác.",
+        "stock": 12
+    },
+    {
+        "id": 4,
+        "name": "Running Shoes",
+        "category": "Shoes",
+        "price": 1299000,
+        "oldPrice": 1599000,
+        "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80",
+        "images": [
+            "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=800&q=80"
+        ],
+        "badge": "HOT",
+        "description": "Giày chạy bộ với thiết kế thể thao năng động, đế giày hỗ trợ vận động và mang lại cảm giác thoải mái khi sử dụng.",
+        "stock": 15
+    },
+    {
+        "id": 5,
+        "name": "Leather Backpack",
+        "category": "Bag",
+        "price": 899000,
+        "oldPrice": 1099000,
+        "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
+        "images": [
+            "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?auto=format&fit=crop&w=800&q=80"
+        ],
+        "badge": "NEW",
+        "description": "Balo phong cách hiện đại với thiết kế rộng rãi, tiện dụng. Phù hợp để đi làm, đi học hoặc sử dụng trong các chuyến đi ngắn.",
+        "stock": 10
+    },
+    {
+        "id": 6,
+        "name": "Classic Sunglasses",
+        "category": "Accessories",
+        "price": 499000,
+        "oldPrice": 650000,
+        "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80",
+        "images": [
+            "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&w=800&q=80"
+        ],
+        "badge": "SALE",
+        "description": "Kính mát thiết kế cổ điển, phù hợp với nhiều phong cách thời trang. Thiết kế đơn giản nhưng vẫn tạo điểm nhấn cho outfit.",
+        "stock": 20
+    },
+    {
+        "id": 7,
+        "name": "Casual Sneakers",
+        "category": "Shoes",
+        "price": 999000,
+        "oldPrice": 1299000,
+        "image": "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=80",
+        "images": [
+            "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=800&q=80"
+        ],
+        "badge": "HOT",
+        "description": "Sneaker casual với thiết kế trẻ trung, dễ phối đồ và phù hợp cho việc đi chơi, đi làm hoặc sử dụng hàng ngày.",
+        "stock": 14
+    },
+    {
+        "id": 8,
+        "name": "Basic Black Cap",
+        "category": "Accessories",
+        "price": 199000,
+        "oldPrice": 299000,
+        "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=800&q=80",
+        "images": [
+            "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1514327605112-b887c0e61c0a?auto=format&fit=crop&w=800&q=80"
+        ],
+        "badge": "NEW",
+        "description": "Mũ lưỡi trai màu đen thiết kế basic, dễ phối với nhiều trang phục và phù hợp sử dụng hàng ngày.",
+        "stock": 30
+    }
+]

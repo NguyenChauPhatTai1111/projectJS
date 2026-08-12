@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chi tiết sản phẩm - MyShop</title>
+
+    <!-- Chặn truy cập nếu chưa login -->
+    <script>
+
+        const isLoggedIn =
+            localStorage.getItem("isLoggedIn");
+
+        if (isLoggedIn !== "true") {
+
+            window.location.href =
+                "login.html";
+
+        }
+
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="product-detail.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="container header-inner">
+
+            <a href="index.html" class="logo">
+                MyShop
+            </a>
+
+
+            <nav class="menu">
+
+                <a href="index.html">
+                    Trang chủ
+                </a>
+
+                <a href="index.html#products">
+                    Sản phẩm
+                </a>
+
+                <a href="#about">
+                    Giới thiệu
+                </a>
+
+            </nav>
+
+
+            <div class="header-actions">
+
+                <button class="cart-btn">
+
+                    🛒
+
+                    <span id="cart-count">
+                        0
+                    </span>
+
+                </button>
+
+
+                <button id="logout-btn">
+                    Đăng xuất
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- PRODUCT DETAIL -->
+
+    <main>
+
+        <section class="product-detail">
+
+            <div class="container">
+
+                <div id="product-detail-container" class="product-detail-grid">
+
+                    <!-- JS render ở đây -->
+
+                    <p>
+                        Đang tải sản phẩm...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DESCRIPTION -->
+
+        <section class="product-description-section">
+
+            <div class="container">
+
+                <h2>
+                    Mô tả sản phẩm
+                </h2>
+
+                <p id="product-description">
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <section class="comments-section">
+
+        <h2>Đánh giá sản phẩm</h2>
+
+        <div id="comments-list">
+            Đang tải bình luận...
+        </div>
+
+
+        <div class="comment-form">
+
+            <h3>Viết đánh giá</h3>
+
+            <div class="rating-input">
+
+                <span data-rating="1">★</span>
+                <span data-rating="2">★</span>
+                <span data-rating="3">★</span>
+                <span data-rating="4">★</span>
+                <span data-rating="5">★</span>
+
+            </div>
+
+
+            <textarea id="comment-content" placeholder="Bạn nghĩ gì về sản phẩm?"></textarea>
+
+
+            <button id="submit-comment">
+                Gửi đánh giá
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <footer>
+
+        <div class="container footer-inner">
+
+            <div>
+
+                <h3>
+                    MyShop
+                </h3>
+
+                <p>
+                    Cửa hàng online của bạn.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="copyright">
+
+            © 2026 MyShop.
+
+        </div>
+
+    </footer>
+
+    <script src="./comment.js"></script>
+
+    <script>
+        /*
+        |--------------------------------------------------------------------------
+        | GET PRODUCT ID FROM URL
+        |--------------------------------------------------------------------------
+        */
+
+        const urlParams =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const productId =
+            Number(
+                urlParams.get("id")
+            );
+
+
+        console.log(
+            "Product ID:",
+            productId
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ELEMENTS
+        |--------------------------------------------------------------------------
+        */
+
+        const productContainer =
+            document.querySelector(
+                "#product-detail-container"
+            );
+
+
+        const productDescription =
+            document.querySelector(
+                "#product-description"
+            );
+
+
+        const cartCount =
+            document.querySelector(
+                "#cart-count"
+            );
+
+
+        const logoutButton =
+            document.querySelector(
+                "#logout-btn"
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | STATE
+        |--------------------------------------------------------------------------
+        */
+
+        let product = null;
+
+        let quantity = 1;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | LOAD PRODUCT
+        |--------------------------------------------------------------------------
+        */
+
+        async function loadProduct() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "./products.json"
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Không thể load products.json"
+                    );
+
+                }
+
+
+                const products =
+                    await response.json();
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | FIND PRODUCT
+                |--------------------------------------------------------------------------
+                */
+
+                product =
+                    products.find(
+                        item =>
+                            item.id === productId
+                    );
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PRODUCT NOT FOUND
+                |--------------------------------------------------------------------------
+                */
+
+                if (!product) {
+
+                    productContainer.innerHTML = `
+
+                <div class="product-not-found">
+
+                    <h2>
+                        Không tìm thấy sản phẩm
+                    </h2>
+
+                    <a href="index.html">
+                        ← Quay lại cửa hàng
+                    </a>
+
+                </div>
+
+            `;
+
+                    return;
+
+                }
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | RENDER
+                |--------------------------------------------------------------------------
+                */
+
+                renderProduct(
+                    product
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+
+                productContainer.innerHTML = `
+
+            <p>
+                Có lỗi xảy ra khi tải sản phẩm.
+            </p>
+
+        `;
+
+            }
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RENDER PRODUCT
+        |--------------------------------------------------------------------------
+        */
+
+        function renderProduct(product) {
+
+            const images =
+                product.images ||
+                [product.image];
+
+
+            productContainer.innerHTML = `
+
+                <div class="detail-gallery">
+
+                    <div class="thumbnail-list">
+
+                        ${images.map(
+                (image, index) => `
+
+                            <img
+                                src="${image}"
+                                class="thumbnail ${index === 0
+                        ? "active"
+                        : ""
+                    }"
+                                data-image="${image}"
+                                alt="${product.name}"
+                            >
+
+                        `
+            ).join("")}
+
+                    </div>
+
+
+                    <div
+                        class="main-image-wrapper"
+                        id="main-image-wrapper"
+                    >
+
+                        <img
+                            id="main-product-image"
+                            class="main-image"
+                            src="${images[0]}"
+                            alt="${product.name}"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-info">
+
+                    <div class="detail-category">
+
+                        ${product.category}
+
+                    </div>
+
+
+                    <h1 class="detail-title">
+
+                        ${product.name}
+
+                    </h1>
+
+
+                    <div class="detail-price">
+
+                        ${formatPrice(product.price)}
+
+                        <span class="detail-old-price">
+
+                            ${formatPrice(
+                product.oldPrice
+            )}
+
+                        </span>
+
+                    </div>
+
+
+                    <p class="detail-description">
+
+                        ${product.description || ""}
+
+                    </p>
+
+
+                    <div class="stock">
+
+                        Còn lại:
+
+                        <strong>
+                            ${product.stock || 0} sản phẩm
+                        </strong>
+
+                    </div>
+
+
+                    <div class="quantity-wrapper">
+
+                        <span>
+                            Số lượng
+                        </span>
+
+                        <div class="quantity">
+
+                            <button
+                                id="minus-btn"
+                                type="button"
+                            >
+                                −
+                            </button>
+
+                            <span id="quantity">
+                                1
+                            </span>
+
+                            <button
+                                id="plus-btn"
+                                type="button"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        id="detail-add-cart"
+                        class="detail-add-cart"
+                    >
+                        Thêm vào giỏ
+                    </button>
+
+                </div>
+
+            `;
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | DESCRIPTION
+            |--------------------------------------------------------------------------
+            */
+
+            productDescription.textContent =
+                product.description ||
+                "Chưa có mô tả.";
+
+
+            setupGallery(
+                images
+            );
+
+
+            setupQuantity();
+
+
+            setupAddCart();
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | GALLERY
+        |--------------------------------------------------------------------------
+        */
+
+        function setupGallery(images) {
+
+            const mainImage =
+                document.querySelector(
+                    "#main-product-image"
+                );
+
+
+            const thumbnails =
+                document.querySelectorAll(
+                    ".thumbnail"
+                );
+
+
+            thumbnails.forEach(
+                thumbnail => {
+
+                    thumbnail.addEventListener(
+                        "click",
+                        function () {
+
+                            mainImage.src =
+                                thumbnail.dataset.image;
+
+
+                            thumbnails.forEach(
+                                item => {
+
+                                    item.classList.remove(
+                                        "active"
+                                    );
+
+                                }
+                            );
+
+
+                            thumbnail.classList.add(
+                                "active"
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+            setupImageZoom();
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | QUANTITY
+        |--------------------------------------------------------------------------
+        */
+
+        function setupQuantity() {
+
+            const quantityElement =
+                document.querySelector(
+                    "#quantity"
+                );
+
+
+            const minusButton =
+                document.querySelector(
+                    "#minus-btn"
+                );
+
+
+            const plusButton =
+                document.querySelector(
+                    "#plus-btn"
+                );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | MINUS
+            |--------------------------------------------------------------------------
+            */
+
+            minusButton.addEventListener(
+                "click",
+                function () {
+
+                    if (
+                        quantity > 1
+                    ) {
+
+                        quantity--;
+
+                        quantityElement.textContent =
+                            quantity;
+
+                    }
+
+                }
+            );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PLUS
+            |--------------------------------------------------------------------------
+            */
+
+            plusButton.addEventListener(
+                "click",
+                function () {
+
+                    const stock =
+                        product.stock || 0;
+
+
+                    if (
+                        quantity < stock
+                    ) {
+
+                        quantity++;
+
+                        quantityElement.textContent =
+                            quantity;
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ADD TO CART
+        |--------------------------------------------------------------------------
+        */
+
+        function setupAddCart() {
+
+            const addCartButton =
+                document.querySelector(
+                    "#detail-add-cart"
+                );
+
+
+            addCartButton.addEventListener(
+                "click",
+                function () {
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | KIỂM TRA STOCK
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if (product.stock <= 0) {
+
+                        alert(
+                            "Sản phẩm đã hết hàng!"
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | KHÔNG CHO THÊM QUÁ SỐ LƯỢNG TỒN
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if (
+                        quantity > product.stock
+                    ) {
+
+                        alert(
+                            `Chỉ còn ${product.stock} sản phẩm!`
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | ADD CART
+                    |--------------------------------------------------------------------------
+                    */
+
+                    addToCart(
+                        product,
+                        quantity
+                    );
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | TRỪ STOCK
+                    |--------------------------------------------------------------------------
+                    */
+
+                    product.stock -= quantity;
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | UPDATE UI
+                    |--------------------------------------------------------------------------
+                    */
+
+                    function updateStockUI() {
+
+                        const stockElement =
+                            document.querySelector(
+                                ".stock strong"
+                            );
+
+
+                        stockElement.textContent =
+                            `${product.stock} sản phẩm`;
+
+                    }
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | RESET QUANTITY
+                    |--------------------------------------------------------------------------
+                    */
+
+                    quantity = 1;
+
+
+                    const quantityElement =
+                        document.querySelector(
+                            "#quantity"
+                        );
+
+
+                    quantityElement.textContent =
+                        quantity;
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | BUTTON
+                    |--------------------------------------------------------------------------
+                    */
+
+                    addCartButton.textContent =
+                        "Đã thêm vào giỏ ✓";
+
+
+                    setTimeout(
+                        () => {
+
+                            addCartButton.textContent =
+                                "Thêm vào giỏ";
+
+                        },
+                        1200
+                    );
+
+                }
+            );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CART
+        |--------------------------------------------------------------------------
+        */
+
+        function getCart() {
+
+            const cart =
+                localStorage.getItem(
+                    "cart"
+                );
+
+
+            if (!cart) {
+
+                return [];
+
+            }
+
+
+            return JSON.parse(
+                cart
+            );
+
+        }
+
+
+        function addToCart(
+            product,
+            quantity
+        ) {
+
+            const cart =
+                getCart();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | CHECK PRODUCT ALREADY EXISTS
+            |--------------------------------------------------------------------------
+            */
+
+            const existingProduct =
+                cart.find(
+                    item =>
+                        item.id === product.id
+                );
+
+
+            if (existingProduct) {
+
+                existingProduct.quantity +=
+                    quantity;
+
+            } else {
+
+                cart.push({
+
+                    id:
+                        product.id,
+
+                    name:
+                        product.name,
+
+                    price:
+                        product.price,
+
+                    image:
+                        product.image,
+
+                    quantity
+
+                });
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | SAVE CART
+            |--------------------------------------------------------------------------
+            */
+
+            localStorage.setItem(
+                "cart",
+                JSON.stringify(cart)
+            );
+
+
+            updateCartCount();
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE CART COUNT
+        |--------------------------------------------------------------------------
+        */
+
+        function updateCartCount() {
+
+            const cart =
+                getCart();
+
+
+            const total =
+                cart.reduce(
+                    (
+                        sum,
+                        item
+                    ) =>
+                        sum +
+                        item.quantity,
+                    0
+                );
+
+
+            cartCount.textContent =
+                total;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | FORMAT PRICE
+        |--------------------------------------------------------------------------
+        */
+
+        function formatPrice(
+            price
+        ) {
+
+            return new Intl.NumberFormat(
+                "vi-VN"
+            ).format(
+                price
+            ) + "đ";
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | LOGOUT
+        |--------------------------------------------------------------------------
+        */
+
+        logoutButton.addEventListener(
+            "click",
+            function () {
+
+                localStorage.removeItem(
+                    "isLoggedIn"
+                );
+
+
+                localStorage.removeItem(
+                    "user"
+                );
+
+
+                window.location.href =
+                    "login.html";
+
+            }
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | START
+        |--------------------------------------------------------------------------
+        */
+
+        loadProduct();
+
+        updateCartCount();
+
+
+        function setupImageZoom() {
+
+            const wrapper =
+                document.querySelector(
+                    "#main-image-wrapper"
+                );
+
+
+            const image =
+                document.querySelector(
+                    "#main-product-image"
+                );
+
+
+            if (!wrapper || !image) {
+                return;
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | MOUSE ENTER
+            |--------------------------------------------------------------------------
+            */
+
+            wrapper.addEventListener(
+                "mouseenter",
+                function () {
+
+                    wrapper.classList.add(
+                        "zooming"
+                    );
+
+                }
+            );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | MOUSE MOVE
+            |--------------------------------------------------------------------------
+            */
+
+            wrapper.addEventListener(
+                "mousemove",
+                function (event) {
+
+                    const rect =
+                        wrapper.getBoundingClientRect();
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | TÍNH VỊ TRÍ CHUỘT
+                    |--------------------------------------------------------------------------
+                    */
+
+                    const x =
+                        event.clientX -
+                        rect.left;
+
+
+                    const y =
+                        event.clientY -
+                        rect.top;
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | CHUYỂN THÀNH %
+                    |--------------------------------------------------------------------------
+                    */
+
+                    const xPercent =
+                        (x / rect.width) * 100;
+
+
+                    const yPercent =
+                        (y / rect.height) * 100;
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | ĐIỂM ZOOM THEO CHUỘT
+                    |--------------------------------------------------------------------------
+                    */
+
+                    image.style.transformOrigin =
+                        `${xPercent}% ${yPercent}%`;
+
+                }
+            );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | MOUSE LEAVE
+            |--------------------------------------------------------------------------
+            */
+
+            wrapper.addEventListener(
+                "mouseleave",
+                function () {
+
+                    wrapper.classList.remove(
+                        "zooming"
+                    );
+
+
+                    image.style.transformOrigin =
+                        "center center";
+
+                }
+            );
+
+        }
+    </script>
+</body>
+
+</html>
