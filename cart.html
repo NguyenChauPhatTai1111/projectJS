@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Giỏ hàng - MyShop</title>
+
+    <link rel="stylesheet" href="./cart.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="container header-inner">
+
+            <a href="./index.html" class="logo">
+                MyShop
+            </a>
+
+            <nav class="menu">
+                <a href="./index.html">Trang chủ</a>
+                <a href="./index.html#products">Sản phẩm</a>
+                <a href="./index.html#about">Giới thiệu</a>
+                <a href="./cart.html" class="cart-link">
+                    🛒 Giỏ hàng
+                    <span id="cart-count">0</span>
+                </a>
+            </nav>
+
+        </div>
+    </header>
+
+
+    <main class="cart-page">
+
+        <div class="container">
+
+            <h1>Giỏ hàng</h1>
+
+            <div id="empty-cart" class="empty-cart">
+                <div class="empty-icon">🛒</div>
+
+                <h2>Giỏ hàng đang trống</h2>
+
+                <p>
+                    Bạn chưa có sản phẩm nào trong giỏ hàng.
+                </p>
+
+                <a href="./index.html" class="continue-shopping">
+                    Tiếp tục mua hàng
+                </a>
+            </div>
+
+
+            <div id="cart-content" class="cart-content">
+
+                <div class="cart-items">
+
+                    <div class="cart-header">
+                        <span>Sản phẩm</span>
+                        <span>Đơn giá</span>
+                        <span>Số lượng</span>
+                        <span>Thành tiền</span>
+                        <span></span>
+                    </div>
+
+                    <div id="cart-items-list"></div>
+
+                </div>
+
+
+                <aside class="cart-summary">
+
+                    <h2>Tổng đơn hàng</h2>
+
+                    <div class="summary-row">
+                        <span>Tạm tính</span>
+                        <strong id="subtotal">0₫</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Phí vận chuyển</span>
+                        <strong id="shipping">0₫</strong>
+                    </div>
+
+                    <div class="summary-total">
+                        <span>Tổng cộng</span>
+                        <strong id="total">0₫</strong>
+                    </div>
+
+                    <button id="checkout-btn" class="checkout-btn">
+                        Thanh toán
+                    </button>
+
+                    <button id="clear-cart-btn" class="clear-cart-btn">
+                        Xóa toàn bộ giỏ hàng
+                    </button>
+
+                </aside>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="./cart.js"></script>
+
+</body>
+
+</html>

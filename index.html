@@ -31,10 +31,10 @@
             <div class="header-actions">
                 <button class="search-btn">🔍</button>
 
-                <button class="cart-btn">
+                <a href="cart.html" class="cart-btn">
                     🛒
                     <span id="cart-count">0</span>
-                </button>
+                </a>
 
                 <button id="logout-btn" class="logout-btn">
                     Đăng xuất
@@ -190,7 +190,33 @@
 
         let products = [];
 
-        let cart = 0;
+        const CART_KEY = "cart";
+
+
+        function getCart() {
+
+            try {
+
+                return JSON.parse(
+                    localStorage.getItem(CART_KEY)
+                ) || [];
+
+            } catch (error) {
+
+                return [];
+
+            }
+        }
+
+
+        function saveCart(cart) {
+
+            localStorage.setItem(
+                CART_KEY,
+                JSON.stringify(cart)
+            );
+
+        }
 
 
         /*
@@ -318,49 +344,95 @@
         | ADD TO CART
         |--------------------------------------------------------------------------
         */
+        function addToCart(product, quantity = 1) {
 
-        productList.addEventListener(
-            "click",
-            function (event) {
+            const cart = getCart();
 
-                if (
-                    event.target.classList.contains(
-                        "add-cart"
-                    )
-                ) {
+            quantity = Number(quantity);
 
-                    const productId =
-                        event.target.dataset.id;
+            if (!Number.isFinite(quantity) || quantity <= 0) {
+                quantity = 1;
+            }
 
+            const existingProduct = cart.find(
+                item =>
+                    String(item.id) === String(product.id)
+            );
 
-                    console.log(
-                        "Product ID:",
-                        productId
-                    );
+            if (existingProduct) {
 
+                existingProduct.quantity =
+                    Number(existingProduct.quantity) + quantity;
 
-                    cart++;
+            } else {
 
-
-                    cartCount.textContent =
-                        cart;
-
-
-                    event.target.textContent =
-                        "Đã thêm ✓";
-
-
-                    setTimeout(() => {
-
-                        event.target.textContent =
-                            "Thêm vào giỏ";
-
-                    }, 1000);
-
-                }
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: Number(product.price),
+                    image: product.image,
+                    quantity: quantity
+                });
 
             }
-        );
+
+            saveCart(cart);
+
+            updateCartCount();
+
+            console.log("Cart:", getCart());
+        }
+
+        function updateCartCount() {
+
+            const cart = getCart();
+
+            const total = cart.reduce(
+                (sum, item) => {
+                    return sum + Number(item.quantity || 0);
+                },
+                0
+            );
+
+            if (cartCount) {
+                cartCount.textContent = total;
+            }
+        }
+
+        productList.addEventListener("click", function (event) {
+
+            const button = event.target.closest(".add-cart");
+
+            if (!button) {
+                return;
+            }
+
+            const productId = button.dataset.id;
+
+            const product = products.find(
+                item =>
+                    String(item.id) === String(productId)
+            );
+
+            if (!product) {
+
+                console.error(
+                    "Không tìm thấy product:",
+                    productId
+                );
+
+                return;
+            }
+
+            addToCart(product, 1);
+
+            button.textContent = "Đã thêm ✓";
+
+            setTimeout(() => {
+                button.textContent = "Thêm vào giỏ";
+            }, 1000);
+
+        });
 
 
         /*
@@ -416,7 +488,7 @@
         */
 
         loadProducts();
-
+        updateCartCount();
 
         /*
         |--------------------------------------------------------------------------
